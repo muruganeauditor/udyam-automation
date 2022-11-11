@@ -4,78 +4,51 @@ import requests
 
 import selenium
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-
-api_url = "https://jsonplaceholder.typicode.com/todos"
+api_url = "http://admin.ibuyfresh.in/api/udyamDetails"
 response = requests.get(api_url)
 apiResponse = response.json()
-if(len(apiResponse)>0):
-    userData = response.json()[0]
-    print(userData.get('title'))
+print(apiResponse['status'])
 
+if apiResponse['status']:
+    userData = apiResponse['data'][0]
+    locals().update(userData)
+else:
+    print("Invalid Api response")
+    sys.exit()
 
-name = 'Murugan Palani'
-email = 'muruganaccetcse@gmail.com'
-mobile = '9585393730'
-aadhaar = '2172 9831 5618'
-social_category = 'ST'
-gender = 'Male'
-specially_abled = 'No'
-have_gstn = 'No'
-enterprise_name = 'Quadatlas'
-pan = 'CLNPM9204L'
-organization_type_id = 'No'
-bank_name = 'No'
-account_number = 'No'
-ifsc_code = 'No'
-business_activity = 'No'
-business_nature = 'No'
-male_employees = 'No'
-female_employees = 'No'
-start_date = 'No'
-flat_no = 'No'
-name_of_building = 'No'
-village_town = 'No'
-block = 'No'
-road_street = 'No'
-pincode = 'No'
-city = 'No'
-state = 'No'
-district = 'No'
+# {"data":[{"id":1,"name":"Murugan palani","email":"muruganaccetcse@gmail.com","mobile":"9585393730","aadhaar":"217298315618","social_category":"General","gender":"Male","specially_abled":"No","have_gstn":"No","enterprise_name":"ITrust","pan":"CLNPM9204L","organization_type_id":"1","bank_name":"HDFC Bank","account_number":"1223423423","ifsc_code":"HDFC0001068","business_activity":"Manufacturing","business_nature":"Service","male_employees":"12","female_employees":"5","start_date":"2022-11-04","flat_no":"12","name_of_building":"Pattanur","village_town":"Baleguli","block":"Kaveripattinam","road_street":"Krishnagiri","pincode":"635204","city":"Krishnagiri","state":"TAMIL NADU","district":"Krishnagiri","status":"1"}],"status":"true"}
 
-
-
-type = ''
-pan = ''
-gender = ''
-category = ''
-enterprise_name = ''
-bank_name = ''
-account_number = ''
-ifsc_code = ''
-business_activity = ''
-male_employee_count = ''
-female_employee_count = ''
-business_date = ''
-address = ''
-floor_no = ''
-village_town = ''
-block = ''
-pin = ''
-state = ''
-district = ''
-cityname = ''
-road_street = ''
-building_name = ''
+# type = ''
+# pan = ''
+# gender = ''
+# category = ''
+# enterprise_name = ''
+# bank_name = ''
+# account_number = ''
+# ifsc_code = ''
+# business_activity = ''
+# male_employee_count = ''
+# female_employee_count = ''
+# business_date = ''
+# address = ''
+# floor_no = ''
+# village_town = ''
+# block = ''
+# pin = ''
+# state = ''
+# district = ''
+# cityname = ''
+# road_street = ''
+# building_name = ''
 
 # all_variables = dir()
 #
@@ -87,9 +60,7 @@ building_name = ''
 #         print(name, 'is', myvalue)
 #
 # sys.exit()
-s=Service('./chromedriver')
-browser = webdriver.Chrome(executable_path='C:\\Users\\Murugan\\Desktop\\eAutomate\\chromedriver')
-# browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+browser = webdriver.Chrome(service=Service('C:\\Users\\Liva\\Desktop\\udyam-automation\\chromedriver.exe'))
 
 browser.maximize_window()
 browser.get("https://udyamregistration.gov.in/UdyamRegistration.aspx")
@@ -104,7 +75,7 @@ browser.implicitly_wait(3)
 browser.find_element("id", "ctl00_ContentPlaceHolder1_btnValidateAadhaar").send_keys(Keys.ENTER)
 
 try:
-    element = WebDriverWait(browser, 3).until(
+    element = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.ID, "ctl00_ContentPlaceHolder1_txtOtp1"))
         )
     element.send_keys("")
@@ -126,7 +97,7 @@ print(149, element.get_attribute("name"))
 
 # # print(browser.page_source)
 
-print('type', type)
+print('type', organization_type_id)
 
 try:
     l = browser.find_element("id", "ctl00_ContentPlaceHolder1_ddlTypeofOrg")
@@ -141,7 +112,8 @@ for opt in d.options:
     if type in opt.text:
         sel = Select(browser.find_element("id", 'ctl00_ContentPlaceHolder1_ddlTypeofOrg'))
 
-        sel.select_by_visible_text(opt.text)
+        # sel.select_by_visible_text(opt.text)
+        sel.select_by_value(organization_type_id)
 
         break
 
@@ -187,7 +159,7 @@ try:
         EC.presence_of_element_located((By.ID, "ctl00_ContentPlaceHolder1_txtmobile"))
     )
     try:
-        browser.find_element("id", "ctl00_ContentPlaceHolder1_txtmobile").send_keys(mobile[-10:])
+        browser.find_element("id", "ctl00_ContentPlaceHolder1_txtmobile").send_keys(mobile)
     except:
         pass
 
@@ -196,16 +168,16 @@ try:
     browser.find_element("id", "ctl00_ContentPlaceHolder1_txtBankName").send_keys(bank_name)
     browser.find_element("id", "ctl00_ContentPlaceHolder1_txtaccountno").send_keys(account_number)
     browser.find_element("id", "ctl00_ContentPlaceHolder1_txtifsccode").send_keys(ifsc_code)
-    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtNoofpersonMale").send_keys(male_employee_count)
-    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtNoofpersonFemale").send_keys(female_employee_count)
+    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtNoofpersonMale").send_keys(male_employees)
+    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtNoofpersonFemale").send_keys(female_employees)
     browser.find_element("id", "ctl00_ContentPlaceHolder1_txtNoofpersonOthers").send_keys(0)
-    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtdateIncorporation").send_keys(business_date)
-    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtcommencedate").send_keys(business_date)
+    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtdateIncorporation").send_keys(start_date)
+    browser.find_element("id", "ctl00_ContentPlaceHolder1_txtcommencedate").send_keys(start_date)
 except Exception as e:
     print('176', str(e))
 
 try:
-    forname = browser.find_element(By.XPATH, "//td//label[contains( text( ), '" + category + "')]").get_attribute('for')
+    forname = browser.find_element(By.XPATH, "//td//label[contains( text( ), '" + social_category + "')]").get_attribute('for')
     caste = browser.find_element(By.CSS_SELECTOR, '#' + forname)
     browser.execute_script("arguments[0].click();", caste)
 except Exception as e:
@@ -233,7 +205,7 @@ except Exception as e:
 
 browser.implicitly_wait(3)
 
-print('category', category)
+print('category', social_category)
 elementFlat = browser.find_element_by_id("ctl00_ContentPlaceHolder1_txtOffFlatNo")
 
 actions = ActionChains(browser)
@@ -241,15 +213,15 @@ actions.move_to_element(elementFlat).perform()
 
 flatElement = WebDriverWait(browser, 8).until(
         EC.presence_of_element_located((By.ID, "ctl00_ContentPlaceHolder1_txtOffFlatNo"))
-    ).send_keys(floor_no)
+    ).send_keys(flat_no)
 
-# browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffFlatNo").send_keys(floor_no)
+# browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffFlatNo").send_keys(flat_no)
 browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffVillageTown").send_keys(village_town)
 browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffBlock").send_keys(block)
-browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffPin").send_keys(pin)
-browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffBuilding").send_keys(building_name)
+browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffPin").send_keys(pincode)
+browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffBuilding").send_keys(name_of_building)
 browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffRoadStreetLane").send_keys(road_street)
-browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffCity").send_keys(cityname)
+browser.find_element("id", "ctl00_ContentPlaceHolder1_txtOffCity").send_keys(city)
 
 try:
     stat = browser.find_element("id", "ctl00_ContentPlaceHolder1_ddlstate")
