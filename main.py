@@ -14,7 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-api_url = "http://admin.ibuyfresh.in/api/udyamDetails"
+api_url = "https://eauditoroffice.in/api/udyamDetails"
 response = requests.get(api_url)
 apiResponse = response.json()
 print(apiResponse['status'])
@@ -97,11 +97,11 @@ print('Options are loaded: ')
 # iterate over dropdown options
 try:
     sel = Select(browser.find_element("id", 'ctl00_ContentPlaceHolder1_ddlTypeofOrg'))
-    browser.implicitly_wait(2)
-    sel.select_by_value(organization_type_id)
+    browser.implicitly_wait(5)
+    sel.select_by_value(str(organization_type_id))
 
 except Exception as e:
-    print("ddlTypeofOrg 104",e)
+    print("ddlTypeofOrg 104",str(e))
 
 time.sleep(6)
 try:
